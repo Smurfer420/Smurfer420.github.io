@@ -239,7 +239,7 @@
 
         lineCountSlider.addEventListener('input', updateLineCount);
         lineCountInput.addEventListener('change', () => {
-            lineCount = Math.min(Math.max(parseInt(lineCountInput.value), 3), 1000);
+            lineCount = Math.min(Math.max(parseInt(lineCountInput.value), 5), 500);
             lineCountSlider.value = lineCount;
             lineCountInput.value = lineCount;
             generateLines();
