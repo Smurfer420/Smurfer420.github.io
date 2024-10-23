@@ -93,7 +93,7 @@
     </style>
 </head>
 <body>
-    <h1>Simple Sorting Visualization</h1></h5>1.1.2</h5>
+    <h1>Simple Sorting Visualization</h1></h5>1.1.3</h5>
     <canvas id="sortCanvas" width="800" height="400"></canvas>
     <div class="control-group">
         <label for="speedSlider">Speed (ms):</label>
@@ -333,6 +333,7 @@
                     lines[i].color = finishedColor;
                 }
                 drawLines();
+                playSound(440 + lines[i].height);
                 await new Promise(resolve => setTimeout(resolve, sortingSpeed / 2));
             }
         }
