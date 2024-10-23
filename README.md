@@ -25,7 +25,7 @@ it's all about lines that are randomly spread around, and a sorting algorythm th
 Either you can just go to [My website](https://koopaxd.github.io)
 
 Or you can download it using the green "Code" button on the top and play with my Code
-#### License
+## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
 
