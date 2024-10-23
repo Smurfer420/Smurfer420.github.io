@@ -29,4 +29,4 @@ Or you can download it using the green "Code" button on the top and play with my
 
 [MIT](https://choosealicense.com/licenses/mit/)
 
-this license dumbed down says: "do what you want with the code (you could even sell this unchanged) but the original creator wont pay for your damages"
+this license dumbed down says: "do what you want with the code, but the original creator wont pay for your damages"
