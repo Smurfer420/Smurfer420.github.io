@@ -113,7 +113,6 @@
             <option value="insertion">Insertion Sort</option>
             <option value="bubble">Bubble Sort</option>
             <option value="bogo">Bogosort</option>
-
         </select>
         <button id="startBtn">Start Sorting</button>
         <button id="newLinesBtn">Generate New Lines</button>
@@ -134,7 +133,6 @@
             <input type="color" id="finishedColorPicker" value="#13A400">
         </div>
     </div>
-
     <script>
         function setCookie(name, value, days) {
             let expires = "";
@@ -145,7 +143,6 @@
             }
             document.cookie = name + "=" + (value || "") + expires + "; path=/";
         }
-
         function getCookie(name) {
             let nameEQ = name + "=";
             let ca = document.cookie.split(';');
@@ -156,11 +153,9 @@
             }
             return null;
         }
-
         function eraseCookie(name) {
             document.cookie = name + '=; Max-Age=-99999999;';
         }
-
         const canvas = document.getElementById('sortCanvas');
         const ctx = canvas.getContext('2d');
         const startBtn = document.getElementById('startBtn');
@@ -175,7 +170,6 @@
         const defaultColorPicker = document.getElementById('defaultColorPicker');
         const activeColorPicker = document.getElementById('activeColorPicker');
         const finishedColorPicker = document.getElementById('finishedColorPicker');
-
         let lines = [];
         let sorting = false;
         let sortingSpeed = parseInt(getCookie('sortingSpeed')) || 100;
@@ -185,7 +179,6 @@
         let activeColor = getCookie('activeColor') || '#ffa500';
         let finishedColor = getCookie('finishedColor') || '#13A400';
         let lightMode = getCookie('lightMode') === 'true';
-
         speedSlider.value = sortingSpeed;
         speedInput.value = sortingSpeed;
         lineCountSlider.value = lineCount;
@@ -196,39 +189,31 @@
         document.body.classList.toggle('light-mode', lightMode);
         muteBtn.textContent = muted ? 'Unmute Sound' : 'Mute Sound';
         lightModeToggle.textContent = lightMode ? 'Toggle Dark Mode' : 'Toggle Light Mode';
-
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-
         function playSound(frequency) {
             if (muted) return;
             const oscillator = audioContext.createOscillator();
             const gainNode = audioContext.createGain();
-            
             oscillator.type = 'sine';
             oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
             gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-            
             oscillator.connect(gainNode);
             gainNode.connect(audioContext.destination);
-            
             oscillator.start();
             gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.1);
             oscillator.stop(audioContext.currentTime + 0.1);
         }
-
         function updateSpeed() {
             sortingSpeed = parseInt(speedSlider.value);
             speedInput.value = sortingSpeed;
             setCookie('sortingSpeed', sortingSpeed, 7);
         }
-
         function updateLineCount() {
             lineCount = parseInt(lineCountSlider.value);
             lineCountInput.value = lineCount;
             generateLines();
             setCookie('lineCount', lineCount, 7);
         }
-
         speedSlider.addEventListener('input', updateSpeed);
         speedInput.addEventListener('change', () => {
             sortingSpeed = Math.min(Math.max(parseInt(speedInput.value), 1), 1000);
@@ -236,7 +221,6 @@
             speedInput.value = sortingSpeed;
             setCookie('sortingSpeed', sortingSpeed, 7);
         });
-
         lineCountSlider.addEventListener('input', updateLineCount);
         lineCountInput.addEventListener('change', () => {
             lineCount = Math.min(Math.max(parseInt(lineCountInput.value), 5), 500);
@@ -245,13 +229,11 @@
             generateLines();
             setCookie('lineCount', lineCount, 7);
         });
-
         muteBtn.addEventListener('click', () => {
             muted = !muted;
             muteBtn.textContent = muted ? 'Unmute Sound' : 'Mute Sound';
             setCookie('muted', muted, 7);
         });
-
         lightModeToggle.addEventListener('click', () => {
             lightMode = !lightMode;
             document.body.classList.toggle('light-mode', lightMode);
@@ -259,43 +241,35 @@
             drawLines();
             setCookie('lightMode', lightMode, 7);
         });
-
         defaultColorPicker.addEventListener('change', () => {
             defaultColor = defaultColorPicker.value;
             generateLines();
             setCookie('defaultColor', defaultColor, 7);
         });
-
         activeColorPicker.addEventListener('change', () => {
             activeColor = activeColorPicker.value;
             setCookie('activeColor', activeColor, 7);
         });
-
         finishedColorPicker.addEventListener('change', () => {
             finishedColor = finishedColorPicker.value;
             setCookie('finishedColor', finishedColor, 7);
         });
-
         function generateLines() {
             lines = [];
             const maxHeight = canvas.height - 20;
             const heightStep = maxHeight / lineCount;
-            
             for (let i = 0; i < lineCount; i++) {
                 lines.push({
                     height: Math.floor((i + 1) * heightStep),
                     color: defaultColor
                 });
             }
-            
             for (let i = lines.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [lines[i], lines[j]] = [lines[j], lines[i]];
             }
-            
             drawLines();
         }
-
         function drawLines() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             const lineWidth = canvas.width / lines.length;
@@ -304,14 +278,12 @@
                 ctx.fillRect(i * lineWidth, canvas.height - lines[i].height, lineWidth - 1, lines[i].height);
             }
         }
-
         function isSorted() {
             for (let i = 1; i < lines.length; i++) {
                 if (lines[i].height < lines[i - 1].height) return false;
             }
             return true;
         }
-
         function shuffleLines() {
             for (let i = lines.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -320,7 +292,6 @@
                 lines[j].color = activeColor;
             }
         }
-
         async function verificationPass() {
             for (let i = 0; i < lines.length; i++) {
                 lines[i].color = activeColor;
@@ -337,7 +308,6 @@
                 await new Promise(resolve => setTimeout(resolve, sortingSpeed / 2));
             }
         }
-
         async function bogoSort() {
             while (!isSorted() && sorting) {
                 shuffleLines();
@@ -350,7 +320,6 @@
                 await verificationPass();
             }
         }
-
         async function bubbleSort() {
             for (let i = 0; i < lines.length; i++) {
                 let swapped = false;
@@ -374,23 +343,18 @@
                 await verificationPass();
             }
         }
-
         async function quickSort(start = 0, end = lines.length - 1) {
             if (start >= end || !sorting) return;
-
             let pivotIndex = await partition(start, end);
             await quickSort(start, pivotIndex - 1);
             await quickSort(pivotIndex + 1, end);
-
             if (start === 0 && end === lines.length - 1 && sorting) {
                 await verificationPass();
             }
         }
-
         async function partition(start, end) {
             let pivotValue = lines[end].height;
             let pivotIndex = start;
-
             for (let i = start; i < end; i++) {
                 if (lines[i].height < pivotValue) {
                     [lines[i], lines[pivotIndex]] = [lines[pivotIndex], lines[i]];
@@ -405,7 +369,6 @@
                     if (!sorting) return;
                 }
             }
-
             [lines[pivotIndex], lines[end]] = [lines[end], lines[pivotIndex]];
             lines[pivotIndex].color = activeColor;
             lines[end].color = activeColor;
@@ -416,25 +379,20 @@
             lines[end].color = defaultColor;
             return pivotIndex;
         }
-
         async function mergeSort(start = 0, end = lines.length - 1) {
             if (start >= end || !sorting) return;
-
             const mid = Math.floor((start + end) / 2);
             await mergeSort(start, mid);
             await mergeSort(mid + 1, end);
             await merge(start, mid, end);
-
             if (start === 0 && end === lines.length - 1 && sorting) {
                 await verificationPass();
             }
         }
-
         async function merge(start, mid, end) {
             const leftArray = lines.slice(start, mid + 1);
             const rightArray = lines.slice(mid + 1, end + 1);
             let i = 0, j = 0, k = start;
-
             while (i < leftArray.length && j < rightArray.length) {
                 if (leftArray[i].height <= rightArray[j].height) {
                     lines[k] = leftArray[i];
@@ -451,7 +409,6 @@
                 k++;
                 if (!sorting) return;
             }
-
             while (i < leftArray.length) {
                 lines[k] = leftArray[i];
                 lines[k].color = activeColor;
@@ -463,7 +420,6 @@
                 k++;
                 if (!sorting) return;
             }
-
             while (j < rightArray.length) {
                 lines[k] = rightArray[j];
                 lines[k].color = activeColor;
@@ -476,12 +432,10 @@
                 if (!sorting) return;
             }
         }
-
         async function heapSort() {
             for (let i = Math.floor(lines.length / 2) - 1; i >= 0; i--) {
                 await heapify(lines.length, i);
             }
-
             for (let i = lines.length - 1; i > 0; i--) {
                 [lines[0], lines[i]] = [lines[i], lines[0]];
                 lines[0].color = activeColor;
@@ -493,25 +447,20 @@
                 await heapify(i, 0);
                 if (!sorting) return;
             }
-
             if (sorting) {
                 await verificationPass();
             }
         }
-
         async function heapify(n, i) {
             let largest = i;
             const left = 2 * i + 1;
             const right = 2 * i + 2;
-
             if (left < n && lines[left].height > lines[largest].height) {
                 largest = left;
             }
-
             if (right < n && lines[right].height > lines[largest].height) {
                 largest = right;
             }
-
             if (largest !== i) {
                 [lines[i], lines[largest]] = [lines[largest], lines[i]];
                 lines[i].color = activeColor;
@@ -524,12 +473,10 @@
                 await heapify(n, largest);
             }
         }
-
         async function insertionSort() {
             for (let i = 1; i < lines.length; i++) {
                 let key = lines[i];
                 let j = i - 1;
-
                 while (j >= 0 && lines[j].height > key.height) {
                     lines[j + 1] = lines[j];
                     lines[j + 1].color = activeColor;
@@ -540,7 +487,6 @@
                     lines[j + 1].color = defaultColor;
                     if (!sorting) return;
                 }
-
                 lines[j + 1] = key;
                 lines[j + 1].color = activeColor;
                 drawLines();
@@ -548,12 +494,10 @@
                 await new Promise(resolve => setTimeout(resolve, sortingSpeed));
                 lines[j + 1].color = defaultColor;
             }
-
             if (sorting) {
                 await verificationPass();
             }
         }
-        
         async function startSorting() {
             sorting = true;
             startBtn.textContent = 'Stop Sorting';
@@ -580,7 +524,6 @@
             sorting = false;
             startBtn.textContent = 'Start Sorting';
         }
-
         startBtn.addEventListener('click', () => {
             if (!sorting) {
                 startSorting();
@@ -589,9 +532,7 @@
                 startBtn.textContent = 'Start Sorting';
             }
         });
-
         newLinesBtn.addEventListener('click', generateLines);
-
         generateLines();
     </script>
     <h5>by Smurfer420</h5>
