@@ -10,8 +10,7 @@ it's all about lines that are randomly spread around, and a sorting algorythm th
 
 - Light/dark mode toggle
 - Cookie system for your settings
-- ~Fullscreen mode~
-- 7 whole algorithms
+- 7 algorithms
 - All important settings along with qulity of life Features
 
 
