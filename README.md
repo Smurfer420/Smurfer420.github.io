@@ -17,6 +17,7 @@ it's all about lines that are randomly spread around, and a sorting algorythm th
 - Cookie system for your settings
 - 6 algorithms
 - All important settings along with quality of life Features
+- stats to see how effective/bad the sorting algorythms are
 
 
 ## Screenshots
