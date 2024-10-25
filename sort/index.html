@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="sort.png" type="image/x-icon">
-    <title>Simple Sasdorting Visualfdfgdization</title>
+    <title>Simple Sorting Visualization</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -93,7 +93,13 @@
     </style>
 </head>
 <body>
-    <h1>Simple Sorting Visualization</h1></h5>1.1.3</h5>
+    <h1>Simple Sorting Visualization</h1>
+    </h5>1.2</h5>
+    <div id="sortingStats">
+        <p>Time: <span id="sortTime">0</span> ms</p>
+        <p>Swaps: <span id="swapCount">0</span></p>
+        <p>Comparisons: <span id="comparisonCount">0</span></p>
+    </div>
     <canvas id="sortCanvas" width="800" height="400"></canvas>
     <div class="control-group">
         <label for="speedSlider">Speed (ms):</label>
@@ -308,6 +314,25 @@
                 await new Promise(resolve => setTimeout(resolve, sortingSpeed / 2));
             }
         }
+        function updateStatsDisplay() {
+            const elapsedTime = sortingStartTime ? (endTime - sortingStartTime) : 0;
+            document.getElementById('sortTime').textContent = elapsedTime.toFixed(2);
+            document.getElementById('swapCount').textContent = swapCount;
+            document.getElementById('comparisonCount').textContent = comparisonCount;
+        }
+        
+        let startTime, endTime, swapCount, comparisonCount;
+        let sortingStartTIme;
+
+        function resetStats() {
+            startTime = 0;
+            endTime = 0;
+            swapCount = 0;
+            comparisonCount = 0;
+            sortingStartTime = null;
+            updateStatsDisplay();
+        }
+        
         async function bogoSort() {
             while (!isSorted() && sorting) {
                 shuffleLines();
@@ -315,6 +340,10 @@
                 playSound(440); 
                 await new Promise(resolve => setTimeout(resolve, sortingSpeed));
                 lines.forEach(line => line.color = defaultColor);
+                comparisonCount++;
+                swapCount++;
+                endTime = performance.now();
+                updateStatsDisplay();
             }
             if (sorting) {
                 await verificationPass();
@@ -324,11 +353,15 @@
             for (let i = 0; i < lines.length; i++) {
                 let swapped = false;
                 for (let j = 0; j < lines.length - i - 1; j++) {
+                    comparisonCount++;
                     if (lines[j].height > lines[j + 1].height) {
                         [lines[j], lines[j + 1]] = [lines[j + 1], lines[j]];
+                        swapCount++;
                         lines[j].color = activeColor;
                         lines[j + 1].color = activeColor;
                         swapped = true;
+                        endTime = performance.now();
+                        updateStatsDisplay()
                         drawLines();
                         playSound(440 + lines[j].height); 
                         await new Promise(resolve => setTimeout(resolve, sortingSpeed));
@@ -337,9 +370,11 @@
                         if (!sorting) return;
                     }
                 }
-                if (!swapped) break; 
+                if (!swapped) break;
             }
             if  (sorting) {
+                endTime = performance.now();
+                updateStatsDisplay();
                 await verificationPass();
             }
         }
@@ -348,6 +383,8 @@
             let pivotIndex = await partition(start, end);
             await quickSort(start, pivotIndex - 1);
             await quickSort(pivotIndex + 1, end);
+            comparisonCount++;
+            endTime = performance.now();
             if (start === 0 && end === lines.length - 1 && sorting) {
                 await verificationPass();
             }
@@ -356,8 +393,10 @@
             let pivotValue = lines[end].height;
             let pivotIndex = start;
             for (let i = start; i < end; i++) {
+                comparisonCount++;
                 if (lines[i].height < pivotValue) {
                     [lines[i], lines[pivotIndex]] = [lines[pivotIndex], lines[i]];
+                    swapCount++;
                     lines[i].color = activeColor;
                     lines[pivotIndex].color = activeColor;
                     pivotIndex++;
@@ -366,10 +405,13 @@
                     await new Promise(resolve => setTimeout(resolve, sortingSpeed));
                     lines[i].color = defaultColor;
                     lines[pivotIndex - 1].color = defaultColor;
+                    endTime = performance.now();
+                    updateStatsDisplay();
                     if (!sorting) return;
                 }
             }
             [lines[pivotIndex], lines[end]] = [lines[end], lines[pivotIndex]];
+            swapCount++;
             lines[pivotIndex].color = activeColor;
             lines[end].color = activeColor;
             drawLines();
@@ -377,6 +419,8 @@
             await new Promise(resolve => setTimeout(resolve, sortingSpeed));
             lines[pivotIndex].color = defaultColor;
             lines[end].color = defaultColor;
+            endTime = performance.now();
+            updateStatsDisplay();
             return pivotIndex;
         }
         async function mergeSort(start = 0, end = lines.length - 1) {
@@ -385,11 +429,15 @@
             await mergeSort(start, mid);
             await mergeSort(mid + 1, end);
             await merge(start, mid, end);
+            endTime = performance.now();
+            updateStatsDisplay();
             if (start === 0 && end === lines.length - 1 && sorting) {
                 await verificationPass();
             }
         }
         async function merge(start, mid, end) {
+            endTime = performance.now();
+            updateStatsDisplay();
             const leftArray = lines.slice(start, mid + 1);
             const rightArray = lines.slice(mid + 1, end + 1);
             let i = 0, j = 0, k = start;
@@ -438,6 +486,7 @@
             }
             for (let i = lines.length - 1; i > 0; i--) {
                 [lines[0], lines[i]] = [lines[i], lines[0]];
+                swapCount++;
                 lines[0].color = activeColor;
                 lines[i].color = finishedColor;
                 drawLines();
@@ -445,6 +494,9 @@
                 await new Promise(resolve => setTimeout(resolve, sortingSpeed));
                 lines[0].color = defaultColor;
                 await heapify(i, 0);
+                comparisonCount++;
+                endTime = performance.now();
+                updateStatsDisplay();
                 if (!sorting) return;
             }
             if (sorting) {
@@ -471,6 +523,9 @@
                 lines[i].color = defaultColor;
                 lines[largest].color = defaultColor;
                 await heapify(n, largest);
+                comparisonCount++;
+                endTime = performance.now();
+                updateStatsDisplay();
             }
         }
         async function insertionSort() {
@@ -479,12 +534,16 @@
                 let j = i - 1;
                 while (j >= 0 && lines[j].height > key.height) {
                     lines[j + 1] = lines[j];
+                    swapCount++;
                     lines[j + 1].color = activeColor;
                     j--;
                     drawLines();
                     playSound(440 + lines[j + 1].height);
                     await new Promise(resolve => setTimeout(resolve, sortingSpeed));
                     lines[j + 1].color = defaultColor;
+                    comparisonCount++;
+                    endTime = performance.now();
+                    updateStatsDisplay();
                     if (!sorting) return;
                 }
                 lines[j + 1] = key;
@@ -493,6 +552,9 @@
                 playSound(440 + lines[j + 1].height);
                 await new Promise(resolve => setTimeout(resolve, sortingSpeed));
                 lines[j + 1].color = defaultColor;
+                comparisonCount++;
+                endTime = performance.now();
+                updateStatsDisplay();
             }
             if (sorting) {
                 await verificationPass();
@@ -501,6 +563,8 @@
         async function startSorting() {
             sorting = true;
             startBtn.textContent = 'Stop Sorting';
+            resetStats();
+            sortingStartTime = performance.now();
             switch (algorithmSelect.value) {
                 case 'merge':
                     await mergeSort();
@@ -521,6 +585,8 @@
                     await bogoSort();
                     break;
             }
+            endTime = performance.now();
+            updateStatsDisplay();
             sorting = false;
             startBtn.textContent = 'Start Sorting';
         }
@@ -536,6 +602,5 @@
         generateLines();
     </script>
     <h5>by Smurfer420</h5>
-    </h2>ToDo: add animations</h2>
 </body>
 </html>
