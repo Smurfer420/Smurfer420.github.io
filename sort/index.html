@@ -94,7 +94,7 @@
 </head>
 <body>
     <h1>Simple Sorting Visualization</h1>
-    </h5>1.2</h5>
+    </h5>1.3</h5>
     <div id="sortingStats">
         <p>Time: <span id="sortTime">0</span> ms</p>
         <p>Swaps: <span id="swapCount">0</span></p>
@@ -117,8 +117,9 @@
             <option value="merge">Merge Sort</option>
             <option value="heap">Heap Sort</option>
             <option value="insertion">Insertion Sort</option>
+            <option value="oddEven">Odd-Even Sort</option>
             <option value="bubble">Bubble Sort</option>
-            <option value="bogo">Bogosort</option>
+            <option value="bogo">Bogo sort</option>
         </select>
         <button id="startBtn">Start Sorting</button>
         <button id="newLinesBtn">Generate New Lines</button>
@@ -331,6 +332,52 @@
             comparisonCount = 0;
             sortingStartTime = null;
             updateStatsDisplay();
+        }
+        
+        async function oddEvenSort() {
+            let sorted = false;
+            while (!sorted && sorting) {
+                sorted = true;
+                for (let i = 1; i < lines.length - 1; i += 2) {
+                    if (lines[i].height > lines[i + 1].height) {
+                        [lines[i], lines[i + 1]] = [lines[i + 1], lines[i]];
+                        swapCount++;
+                        sorted = false;
+                        lines[i].color = activeColor;
+                        lines[i + 1].color = activeColor;
+                        drawLines();
+                        playSound(440 + lines[i].height);
+                        await new Promise(resolve => setTimeout(resolve, sortingSpeed));
+                        lines[i].color = defaultColor;
+                        lines[i + 1].color = defaultColor;
+                    }
+                    comparisonCount++;
+                    endTime = performance.now();
+                    updateStatsDisplay();
+                    if (!sorting) return;
+                }
+                for (let i = 0; i < lines.length - 1; i += 2) {
+                    if (lines[i].height > lines[i + 1].height) {
+                        [lines[i], lines[i + 1]] = [lines[i + 1], lines[i]];
+                        swapCount++;
+                        sorted = false;
+                        lines[i].color = activeColor;
+                        lines[i + 1].color = activeColor;
+                        drawLines();
+                        playSound(440 + lines[i].height);
+                        await new Promise(resolve => setTimeout(resolve, sortingSpeed));
+                        lines[i].color = defaultColor;
+                        lines[i + 1].color = defaultColor;
+                    }
+                    comparisonCount++;
+                    endTime = performance.now();
+                    updateStatsDisplay();
+                    if (!sorting) return;
+                }
+            }
+            if (sorting) {
+                await verificationPass();
+            }
         }
         
         async function bogoSort() {
@@ -583,6 +630,9 @@
                     break;
                 case 'bogo':
                     await bogoSort();
+                    break;
+                case 'oddEven':
+                    await oddEvenSort();
                     break;
             }
             endTime = performance.now();
