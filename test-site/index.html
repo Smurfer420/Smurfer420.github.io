@@ -17,11 +17,12 @@
         <i>this is italic (or something)<br></i>
         <u>this is underlined text<br></u>
         <strong>this text is Strong!<br></strong>
-        <p>and this is everything combined: <u><i><b>IPhone 19.9 Pro ultra max deluxe super limited edition 2030</b></i></u></p>
+        <p>and this is everythingcombined: <u><i><b>I hate my life!</b></i></u></p>
         <em>This is italic too! wait, this is not even italic, but its the same???</em> <!--works for screen readers and stuff, just use this instead of <i>-->
-        <br>this is a link to<a href="https://example.com"><br>example.com</a>
-        <!--list start-->
-        This is a list<ol>
+
+        <p>this is a link to    <a href="https://example.com">example.com</a></p>
+        
+        <br>This is a list<ol>
             <li>Fruits</li>
               <ul>
                 <li>Apple</li>
@@ -35,8 +36,24 @@
             <li>Item2</li>
             <li>Item3</li>
         </ol>
-        <!--list end-->
-        <img src="https://fastly.picsum.photos/id/729/536/354.jpg?hmac=2w_Fr-PmHejgKkQutSxtALszyq2aSwHUw2HajRvw7t0" alt ="Picture of people on a farm" height="169" width="420"> 
-        <!--the "alt" is used for search engines, screen readers, and when images wont load-->
+        
+        <img src="https://fastly.picsum.photos/id/729/536/354.jpg?hmac=2w_Fr-PmHejgKkQutSxtALszyq2aSwHUw2HajRvw7t0" alt ="Picture of people on a farm" height="169" width="500"> <!--the "alt" is used for search engines, screen readers, and when images wont load--> <br>
+        <br><button onclick='alert("This is a pop-up window")'>Pop-up window button</button><br><br>
+        Click those images!<br>
+        <img src="https://fastly.picsum.photos/id/729/536/354.jpg?hmac=2w_Fr-PmHejgKkQutSxtALszyq2aSwHUw2HajRvw7t0" alt ="Picture of people on a farm" width="500" onclick='alert("This is a pop-up on an image!")'> <br>
+        <img src="https://fastly.picsum.photos/id/729/536/354.jpg?hmac=2w_Fr-PmHejgKkQutSxtALszyq2aSwHUw2HajRvw7t0" alt ="Picture of people on a farm" onclick='width=500'><br>
+        <img src="https://fastly.picsum.photos/id/729/536/354.jpg?hmac=2w_Fr-PmHejgKkQutSxtALszyq2aSwHUw2HajRvw7t0" alt ="Picture of people on a farm" onclick='src="https://media.cntraveler.com/photos/5eb18e42fc043ed5d9779733/16:9/w_1920%2Cc_limit/BlackForest-Germany-GettyImages-147180370.jpg"' width=500>
+    
+        <br><br><br>
+        <p>those images are stolen from Sololearn</p> <!--and the code too!-->
+        <img id="robot" src="https://blob.sololearn.com/courses/robot-c.jpg"><br>
+        <button onclick="robot.src='https://blob.sololearn.com/courses/robot-l.jpg'">Left</button>
+        <button onclick="robot.src='https://blob.sololearn.com/courses/robot-r.jpg'"> Right</button>
+
+        
     </body>
+    <script>
+    console.log('The console is not the right place to do things here, you might want to go to the "inspect" tab');
+    alert("This is just some random stuff i added here, so if some new html/js dev sees this, he might know how to to do certain stuff")
+    </script>
 </html>
