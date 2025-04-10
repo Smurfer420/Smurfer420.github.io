@@ -16,11 +16,11 @@ Its a small and simple website, for nothing other than visualizing sorting algor
 
 ![App Screenshot](https://i.ibb.co/7j81yZh/Screenshot-from-2024-10-23-20-37-03.png)
 
-##Example site
+## Example site
 
 Just a website to show different elements in html and the uses, nothing more.
 
-#How to use
+# How to use
 
 Either you can just go to [My website](https://Smurfer420.github.io)
 
